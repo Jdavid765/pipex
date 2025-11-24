@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:33:04 by david             #+#    #+#             */
-/*   Updated: 2025/11/23 18:33:52 by david            ###   ########.fr       */
+/*   Updated: 2025/11/24 13:21:50 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,6 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 #endif
