@@ -1,6 +1,8 @@
 CC = gcc
 NAME = pipex
 CFLAGS = -Wall -Werror -Wextra
+DIRPRINTF = printf
+PRINTF = $(DIRPRINTF)/libftprintf.a
 SRC = main.c
 OBJ = $(SRC:.c=.o)
 RM = rm -rf
@@ -13,7 +15,7 @@ NB := $(words $(SRC))
 BARLEN = 30
 
 %.o: %.c
-	@$(eval CNT := $(shell ls $(DIRSRC)/*.o $(DIRGNL)/*.o $(DIRLIBFT)/*.o $(DIRPRINTF)/*.o 2>/dev/null | wc -l))
+	@$(eval CNT := $(shell ls $(DIRPRINTF)/*.o 2>/dev/null | wc -l))
 	@$(eval PROG := $(shell echo $$(($(CNT) * 100 / $(NB))) ))
 	@$(eval FILLED := $(shell echo $$(($(PROG) * $(BARLEN) / 100)) ))
 	@$(eval EMPTY := $(shell echo $$(($(BARLEN) - $(FILLED))) ))
@@ -27,16 +29,21 @@ BARLEN = 30
 
 # --------------------------------------------------------
 
-all : $(NAME)
+all : $(PRINTF) $(NAME)
+
+$(PRINTF):
+	$(MAKE) -C $(DIRPRINTF) --no-print-directory > /dev/null
 
 $(NAME) : $(OBJ)
-	$(CC) $(OBJ) $(CFLAGS) -o $(NAME)
+	$(CC) $(OBJ) $(PRINTF) $(CFLAGS) -o $(NAME)
 
 clean :
 	$(RM) $(OBJ)
+	$(MAKE) -C $(DIRPRINTF) clean --no-print-directory > /dev/null
 
 fclean : clean
 	$(RM) $(NAME)
+	$(MAKE) -C $(DIRPRINTF) fclean --no-print-directory > /dev/null
 
 re : fclean all
 
