@@ -3,7 +3,10 @@ NAME = pipex
 CFLAGS = -Wall -Werror -Wextra
 DIRPRINTF = printf
 PRINTF = $(DIRPRINTF)/libftprintf.a
-SRC = main.c
+DIRLIBFT = libft
+LIBFT = $(DIRLIBFT)/libft.a
+SRC = utils.c\
+	main.c
 OBJ = $(SRC:.c=.o)
 RM = rm -rf
 
@@ -29,21 +32,26 @@ BARLEN = 30
 
 # --------------------------------------------------------
 
-all : $(PRINTF) $(NAME)
+all : $(LIBFT) $(PRINTF) $(NAME)
+
+$(LIBFT):
+	$(MAKE) -C $(DIRLIBFT) --no-print-directory > /dev/null
 
 $(PRINTF):
 	$(MAKE) -C $(DIRPRINTF) --no-print-directory > /dev/null
 
 $(NAME) : $(OBJ)
-	$(CC) $(OBJ) $(PRINTF) $(CFLAGS) -o $(NAME)
+	$(CC) $(OBJ) $(PRINTF) $(LIBFT) $(CFLAGS) -o $(NAME)
 
 clean :
 	$(RM) $(OBJ)
 	$(MAKE) -C $(DIRPRINTF) clean --no-print-directory > /dev/null
+	$(MAKE) -C $(DIRLIBFT) clean --no-print-directory > /dev/null
 
 fclean : clean
 	$(RM) $(NAME)
 	$(MAKE) -C $(DIRPRINTF) fclean --no-print-directory > /dev/null
+	$(MAKE) -C $(DIRLIBFT) fclean --no-print-directory > /dev/null
 
 re : fclean all
 

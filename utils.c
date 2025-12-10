@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 18:33:04 by david             #+#    #+#             */
-/*   Updated: 2025/12/10 23:41:37 by david            ###   ########.fr       */
+/*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
+/*   Updated: 2025/12/10 23:58:30 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "pipex.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include <stdio.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include "printf/ft_printf.h"
-# include "libft/libft.h"
+void	search_path(char **env, char **path)
+{
+    int	i;
 
-void	search_path(char **env, char **path);
-
-#endif
+	i = 0;
+	while (env[i])
+	{
+		if (env[i][0] == 'P')
+			if(ft_strncmp(env[i], "PATH=", 5) == 0)
+				*path = env[i];
+		if (*path != NULL)
+			break;
+		i++;
+	}
+}
