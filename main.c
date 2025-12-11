@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:32:55 by david             #+#    #+#             */
-/*   Updated: 2025/12/10 23:58:57 by david            ###   ########.fr       */
+/*   Updated: 2025/12/11 23:06:26 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,51 @@
 
 int main(int ac, char **av, char **env)
 {
-	// pid_t	pid;
-	// int		status;
-
-	// if (ac > 1)
-	// {
-	// 	pid = fork();
-	// 	if (pid == -1)
-	// 		perror("fork :");
-	// 	if (pid == 0)
-	// 	{
-	// 		if (execve(av[1], av + 1, env) == -1)
-	// 			perror("fork : ");
-	// 		return(1);
-	// 	}
-	// 	else
-	// 		wait(&status);
-	// }
-	// ft_printf("je suis le pere %d\n", getpid());
-
-	char *path = NULL;
-	if (ac == 1)
+	pid_t	pid;
+	int		pipefd[2];
+	int		infile;
+	// char	*path;
+	
+	// path = NULL;
+	if (ac > 1)
 	{
-		search_path(env, &path);
-		if(path == NULL)
-			perror("PATH :");
+		if (pipe(pipefd) == -1)
+		{
+			perror("Pipe :");
+			exit(1);
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork :");
+			exit(1);
+		}
+		else if (pid == 0)
+		{
+			infile = open(av[1], O_RDONLY);
+			if (infile == -1)
+			{
+				perror("fd :");
+				exit(1);
+			}
+			dup2(infile, 0);
+			if (execve(av[2], av + 2, env) == -1)
+				perror("Execve :");
+		}
 		else
-			ft_printf("%s\n", path);
+			wait(NULL);
+			
 	}
-	else
-		ft_printf("%s", av[1]);
+
+	// if (ac == 1)
+	// {
+	// 	search_path(env, &path);
+	// 	if(path == NULL)
+	// 		perror("PATH :");
+	// 	else
+	// 		ft_printf("%s\n", path);
+	// }
+	// else
+	// 	ft_printf("%s", av[1]);
     return (0);
 }
