@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2025/12/11 21:26:09 by david            ###   ########.fr       */
+/*   Updated: 2025/12/12 11:58:44 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,3 +33,11 @@ void	search_path(char **env, char **path)
 	}
 }
 
+void	exec(char **av, char **env, char *path)
+{
+	char	**cmd;
+
+	cmd = ft_split(av[2], ' ');
+	if (execve(path, cmd, env) == -1)
+				perror("Execve :");
+}

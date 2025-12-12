@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:33:04 by david             #+#    #+#             */
-/*   Updated: 2025/12/11 21:14:35 by david            ###   ########.fr       */
+/*   Updated: 2025/12/12 11:48:34 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@
 # include "libft/libft.h"
 
 void	search_path(char **env, char **path);
+void	exec(char **av, char **env, char *path);
 
 #endif
