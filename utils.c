@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2025/12/16 23:33:27 by david            ###   ########.fr       */
+/*   Updated: 2025/12/16 23:37:27 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	check_access(char **av, char **env, char *path)
 	char	**cmd;
 	char	**search_access;
 	int		i;
+	char	*tmp;
 
 	search_access = NULL;
 	i = 0;
@@ -65,8 +66,12 @@ void	check_access(char **av, char **env, char *path)
 	}
 	while (search_access[i])
 	{
+		tmp = search_access[i];
 		search_access[i] = ft_strjoin(search_access[i], "/");
+		free(tmp);
+		tmp = search_access[i];
 		search_access[i] = ft_strjoin(search_access[i], cmd[0]);
+		free(tmp);
 		if (access(search_access[i], F_OK | X_OK) == 0)
 			exec(env, search_access[i], cmd);
 		i++;
