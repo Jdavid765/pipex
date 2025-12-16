@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2025/12/14 15:26:23 by david            ###   ########.fr       */
+/*   Updated: 2025/12/16 23:33:27 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,42 @@ void	search_path(char **env, char **path)
 	}
 }
 
-void	exec(char **av, char **env, char *path)
+void	exec(char **env, char *pathname, char **cmd)
+{
+	if (execve(pathname, cmd, env) == -1)
+	{
+		perror("execve :");
+		exit(1);
+	}
+	
+}
+
+void	check_access(char **av, char **env, char *path)
 {
 	char	**cmd;
+	char	**search_access;
+	int		i;
 
+	search_access = NULL;
+	i = 0;
 	cmd = ft_split(av[2], ' ');
+	if (cmd == NULL)
+	{
+		perror("commandes :");
+		exit(1);
+	}
+	search_access = ft_split(path, ':');
+	if (search_access == NULL)
+	{
+		perror("search_access :");
+		exit(1);
+	}
+	while (search_access[i])
+	{
+		search_access[i] = ft_strjoin(search_access[i], "/");
+		search_access[i] = ft_strjoin(search_access[i], cmd[0]);
+		if (access(search_access[i], F_OK | X_OK) == 0)
+			exec(env, search_access[i], cmd);
+		i++;
+	}
 }

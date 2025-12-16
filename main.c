@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:32:55 by david             #+#    #+#             */
-/*   Updated: 2025/12/14 15:19:47 by david            ###   ########.fr       */
+/*   Updated: 2025/12/16 23:32:58 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int main(int ac, char **av, char **env)
 			search_path(env, &path);
 			if(path == NULL)
 				perror("PATH :");
-			exec(av, env, path);
+			check_access(av, env, path);
 		}
 		else
 			wait(NULL);
