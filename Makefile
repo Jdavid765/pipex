@@ -1,6 +1,6 @@
 CC = gcc
 NAME = pipex
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 DIRPRINTF = printf
 PRINTF = $(DIRPRINTF)/libftprintf.a
 DIRLIBFT = libft
