@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2025/12/20 00:18:17 by david            ###   ########.fr       */
+/*   Updated: 2025/12/21 20:01:15 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,22 @@
 
 void	search_path(char **env, char **path)
 {
-    int	i;
+	int	i;
 
 	i = 0;
 	while (env[i])
 	{
 		if (env[i][0] == 'P')
-			if(ft_strncmp(env[i], "PATH=", 5) == 0)
+		{
+			if (ft_strncmp(env[i], "PATH=", 5) == 0)
 			{
-				*path = ft_strdup(env[i]);
+				*path = ft_strdup(env[i] + 5);
 				if (*path == NULL)
 					return ;
 			}
-				
+		}
 		if (*path != NULL)
-			break;
+			break ;
 		i++;
 	}
 }
@@ -40,19 +41,30 @@ void	exec(char **env, char *pathname, char **cmd)
 		perror("execve :");
 		exit(1);
 	}
-	
 }
 
-void	check_access(char **av, char **env, char *path)
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
+void	check_access(char **av, char **env, char *path, int cmd_index)
 {
 	char	**cmd;
 	char	**search_access;
 	int		i;
 	char	*tmp;
 
-	search_access = NULL;
 	i = 0;
-	cmd = ft_split(av[2], ' ');
+	cmd = ft_split(av[cmd_index], ' ');
 	if (cmd == NULL)
 	{
 		perror("commandes :");
@@ -61,6 +73,7 @@ void	check_access(char **av, char **env, char *path)
 	search_access = ft_split(path, ':');
 	if (search_access == NULL)
 	{
+		free_split(cmd);
 		perror("search_access :");
 		exit(1);
 	}
@@ -76,4 +89,8 @@ void	check_access(char **av, char **env, char *path)
 			exec(env, search_access[i], cmd);
 		i++;
 	}
+	ft_printf("pipex: command not found: %s\n", cmd[0]);
+	free_split(cmd);
+	free_split(search_access);
+	exit(1);
 }

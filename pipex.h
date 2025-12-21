@@ -23,7 +23,7 @@
 # include "libft/libft.h"
 
 void	search_path(char **env, char **path);
-void	check_access(char **av, char **env, char *path);
+void	check_access(char **av, char **env, char *path, int cmd_index);
 void	exec(char **env, char *pathname, char **cmd);
 
 #endif
