@@ -6,28 +6,28 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:32:55 by david             #+#    #+#             */
-/*   Updated: 2025/12/21 20:03:42 by david            ###   ########.fr       */
+/*   Updated: 2025/12/29 23:38:41 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	child_one(char **av, char **env, int *pipefd)
+void	child_one(char **av, char **env, int *pipefd)
 {
-	int		infile;
+	int		fd;
 	char	*path;
 
 	path = NULL;
 	close(pipefd[0]);
-	infile = open(av[1], O_RDONLY);
-	if (infile == -1)
+	fd = open(av[1], O_RDONLY);
+	if (fd == -1)
 	{
 		perror("Fd :");
 		exit(1);
 	}
-	dup2(infile, 0);
+	dup2(fd, 0);
 	dup2(pipefd[1], 1);
-	close(infile);
+	close(fd);
 	close(pipefd[1]);
 	search_path(env, &path);
 	if (path == NULL)
@@ -38,23 +38,23 @@ static void	child_one(char **av, char **env, int *pipefd)
 	check_access(av, env, path, 2);
 }
 
-static void	child_two(char **av, char **env, int *pipefd)
+void	child_two(char **av, char **env, int *pipefd)
 {
-	int		outfile;
+	int		fd;
 	char	*path;
 
 	path = NULL;
 	close(pipefd[1]);
-	outfile = open(av[4], O_WRONLY | O_CREAT);
-	if (outfile == -1)
+	fd = open(av[4], O_WRONLY | O_CREAT);
+	if (fd == -1)
 	{
 		perror("Fd :");
 		exit(1);
 	}
 	dup2(pipefd[0], 0);
-	dup2(outfile, 1);
+	dup2(fd, 1);
 	close(pipefd[0]);
-	close(outfile);
+	close(fd);
 	search_path(env, &path);
 	if (path == NULL)
 	{
@@ -64,22 +64,11 @@ static void	child_two(char **av, char **env, int *pipefd)
 	check_access(av, env, path, 3);
 }
 
-int	main(int ac, char **av, char **env)
+void	pipex(char **av, char **env, int *pipefd)
 {
 	pid_t	pid1;
 	pid_t	pid2;
-	int		pipefd[2];
 
-	if (ac != 5)
-	{
-		ft_printf("Use: ./pipex infile cmd1 cmd2 outfile\n");
-		return (1);
-	}
-	if (pipe(pipefd) == -1)
-	{
-		perror("Pipe :");
-		exit(1);
-	}
 	pid1 = fork();
 	if (pid1 == -1)
 	{
@@ -100,5 +89,22 @@ int	main(int ac, char **av, char **env)
 	close(pipefd[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
+}
+
+int	main(int ac, char **av, char **env)
+{
+	int		pipefd[2];
+
+	if (ac != 5)
+	{
+		ft_printf("Use: ./pipex infile cmd1 cmd2 outfile\n");
+		return (1);
+	}
+	if (pipe(pipefd) == -1)
+	{
+		perror("Pipe :");
+		exit(1);
+	}
+	pipex(av, env, pipefd);
 	return (0);
 }

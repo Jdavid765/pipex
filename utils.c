@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2025/12/21 20:01:15 by david            ###   ########.fr       */
+/*   Updated: 2025/12/29 23:28:04 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,31 @@ void	free_split(char **split)
 	free(split);
 }
 
+void	loop(char **search_access, char **env, char **cmd)
+{
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (search_access[i])
+	{
+		tmp = search_access[i];
+		search_access[i] = ft_strjoin(search_access[i], "/");
+		free(tmp);
+		tmp = search_access[i];
+		search_access[i] = ft_strjoin(search_access[i], cmd[0]);
+		free(tmp);
+		if (access(search_access[i], F_OK | X_OK) == 0)
+			exec(env, search_access[i], cmd);
+		i++;
+	}
+}
+
 void	check_access(char **av, char **env, char *path, int cmd_index)
 {
 	char	**cmd;
 	char	**search_access;
-	int		i;
-	char	*tmp;
 
-	i = 0;
 	cmd = ft_split(av[cmd_index], ' ');
 	if (cmd == NULL)
 	{
@@ -77,18 +94,7 @@ void	check_access(char **av, char **env, char *path, int cmd_index)
 		perror("search_access :");
 		exit(1);
 	}
-	while (search_access[i])
-	{
-		tmp = search_access[i];
-		search_access[i] = ft_strjoin(search_access[i], "/");
-		free(tmp);
-		tmp = search_access[i];
-		search_access[i] = ft_strjoin(search_access[i], cmd[0]);
-		free(tmp);
-		if (access(search_access[i], F_OK | X_OK) == 0)
-			exec(env, search_access[i], cmd);
-		i++;
-	}
+	loop(search_access, env, cmd);
 	ft_printf("pipex: command not found: %s\n", cmd[0]);
 	free_split(cmd);
 	free_split(search_access);
