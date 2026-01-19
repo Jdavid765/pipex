@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:32:55 by david             #+#    #+#             */
-/*   Updated: 2026/01/19 16:30:04 by david            ###   ########.fr       */
+/*   Updated: 2026/01/19 16:53:38 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	child_one(char **av, char **env, int *pipefd)
 	if (fd == -1)
 	{
 		perror("Fd :");
+		close(fd);
 		exit(1);
 	}
 	dup2(fd, 0);
@@ -32,7 +33,7 @@ void	child_one(char **av, char **env, int *pipefd)
 	search_path(env, &path);
 	if (path == NULL)
 	{
-		perror("PATH :");
+		fr_printf("Error path not found\n");
 		exit(1);
 	}
 	check_access(av, env, path, 2);
@@ -49,6 +50,7 @@ void	child_two(char **av, char **env, int *pipefd)
 	if (fd == -1)
 	{
 		perror("Fd :");
+		close(fd);
 		exit(1);
 	}
 	dup2(pipefd[0], 0);
@@ -58,7 +60,7 @@ void	child_two(char **av, char **env, int *pipefd)
 	search_path(env, &path);
 	if (path == NULL)
 	{
-		perror("PATH :");
+		fr_printf("Error path not found\n");
 		exit(1);
 	}
 	check_access(av, env, path, 3);
