@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:32:55 by david             #+#    #+#             */
-/*   Updated: 2025/12/29 23:38:41 by david            ###   ########.fr       */
+/*   Updated: 2026/01/19 16:26:09 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	child_one(char **av, char **env, int *pipefd)
 
 	path = NULL;
 	close(pipefd[0]);
-	fd = open(av[1], O_RDONLY);
+	fd = open(av[1], O_RDONLY | O_CREAT);
 	if (fd == -1)
 	{
 		perror("Fd :");
