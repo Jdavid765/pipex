@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2025/12/29 23:28:04 by david            ###   ########.fr       */
+/*   Updated: 2026/01/21 13:11:07 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,6 @@ void	exec(char **env, char *pathname, char **cmd)
 	}
 }
 
-void	free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}
-
 void	loop(char **search_access, char **env, char **cmd)
 {
 	char	*tmp;
@@ -76,17 +63,10 @@ void	loop(char **search_access, char **env, char **cmd)
 	}
 }
 
-void	check_access(char **av, char **env, char *path, int cmd_index)
+void	search_in_path(char *path, char **cmd, char **env)
 {
-	char	**cmd;
 	char	**search_access;
 
-	cmd = ft_split(av[cmd_index], ' ');
-	if (cmd == NULL)
-	{
-		perror("commandes :");
-		exit(1);
-	}
 	search_access = ft_split(path, ':');
 	if (search_access == NULL)
 	{
@@ -95,8 +75,24 @@ void	check_access(char **av, char **env, char *path, int cmd_index)
 		exit(1);
 	}
 	loop(search_access, env, cmd);
+	free_split(search_access);
+}
+
+void	check_access(char **av, char **env, char *path, int cmd_index)
+{
+	char	**cmd;
+
+	cmd = ft_split(av[cmd_index], ' ');
+	if (cmd == NULL)
+	{
+		perror("commandes :");
+		exit(1);
+	}
+	if (ft_strchr(cmd[0], '/') != NULL)
+		check_acesso(cmd, env);
+	else if (path != NULL)
+		search_in_path(path, cmd, env);
 	ft_printf("pipex: command not found: %s\n", cmd[0]);
 	free_split(cmd);
-	free_split(search_access);
 	exit(1);
 }

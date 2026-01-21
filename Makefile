@@ -6,7 +6,8 @@ PRINTF = $(DIRPRINTF)/libftprintf.a
 DIRLIBFT = libft
 LIBFT = $(DIRLIBFT)/libft.a
 SRC = utils.c\
-	main.c
+	main.c\
+	free.c
 OBJ = $(SRC:.c=.o)
 RM = rm -rf
 
