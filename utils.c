@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 22:56:32 by david             #+#    #+#             */
-/*   Updated: 2026/01/21 13:11:07 by david            ###   ########.fr       */
+/*   Updated: 2026/01/22 22:21:51 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,7 @@ void	check_access(char **av, char **env, char *path, int cmd_index)
 		search_in_path(path, cmd, env);
 	ft_printf("pipex: command not found: %s\n", cmd[0]);
 	free_split(cmd);
+	free(path);
+	path = NULL;
 	exit(1);
 }

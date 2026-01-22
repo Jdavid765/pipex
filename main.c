@@ -6,7 +6,7 @@
 /*   By: david <david@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 18:32:55 by david             #+#    #+#             */
-/*   Updated: 2026/01/21 13:02:15 by david            ###   ########.fr       */
+/*   Updated: 2026/01/22 22:27:04 by david            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	child_one(char **av, char **env, int *pipefd)
 	if (fd == -1)
 	{
 		perror("Fd :");
-		close(fd);
+		close(pipefd[1]);
 		exit(1);
 	}
 	dup2(fd, 0);
@@ -51,7 +51,7 @@ void	child_two(char **av, char **env, int *pipefd)
 	if (fd == -1)
 	{
 		perror("Fd :");
-		close(fd);
+		close(pipefd[0]);
 		exit(1);
 	}
 	dup2(pipefd[0], 0);
